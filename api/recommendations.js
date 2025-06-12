@@ -14,7 +14,7 @@ export default async function handler(request, response) {
       return response.status(500).json({ error: 'API key not configured on the server.' });
     }
 
-    const fullPrompt = `You are a helpful librarian. A user is looking for book recommendations. Their request is: "${userPrompt}". Based on this request, please recommend up to three books from the following list. For each book, provide the title in bold, followed by a brief, one-sentence explanation of why it's a good match. ONLY recommend books from this list. Do not make up any books. Here is the list of available books:\n${bookList}`;
+    const fullPrompt = `You are a helpful librarian. A user is looking for book recommendations. Their request is: "${userPrompt}". Based on this request, please recommend up to three books from the following list. For each book, provide the title in bold, followed by a brief, one-sentence explanation of why it's a good match. ONLY recommend books from this list. DO NOT include any markdown or special formatting. Format everything as a bulleted list with clean line breaks. Do not make up any books. Here is the list of available books:\n${bookList}`;
 
     let chatHistory = [{ role: "user", parts: [{ text: fullPrompt }] }];
     const payload = { contents: chatHistory };
