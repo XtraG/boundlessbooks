@@ -319,6 +319,13 @@
         </div>
     </div>
     
+    <!-- My List Modal -->
+    <div id="my-list-modal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-4 modal-container">
+        <div id="my-list-modal-content" class="modal-content bg-gray-900 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto relative shadow-2xl shadow-indigo-900/20 border border-gray-700 p-6 md:p-8">
+           <!-- My List content will be injected by JavaScript -->
+        </div>
+    </div>
+
     <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-5 right-5 bg-indigo-600 text-white py-3 px-6 rounded-lg shadow-lg flex items-center space-x-3 z-50">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
@@ -332,7 +339,7 @@
             // --- DATABASE ---
             const books = [
                 // Existing Books
-                { id: 1, title: "Awâsis and the World-Famous Bannock", author: "Dallas Hunt", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "A young Cree child, Awâsis, loses their Kôhkum's freshly made bannock. With the help of animal friends, Awâsis retraces their steps to find the treasured food.", teaser: "Follow Awâsis on a delightful adventure through the forest.", coverUrl: "https://placehold.co/400x600/6366f1/ffffff?text=Awâsis+and\\nthe+World-\\nFamous\\nBannock" },
+                { id: 1, title: "Awâsis and the World-Famous Bannock", author: "Dallas Hunt", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "A young Cree child, Awâsis, loses their Kôhkum's freshly made bannock. With the help of animal friends, Awâsis retraces their steps to find the treasured food.", teaser: "Follow Awâsis on a delightful adventure through the forest.", coverUrl: "https://placehold.co/400x600/6366f1/ffffff?text=Awâsis" },
                 { id: 2, title: "Boxitects", author: "Kim Smith", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "Meg is a 'boxitect,' an architect who builds with boxes. When another boxitect, Simone, joins her class, they must learn to collaborate on a grand project for the annual Maker Match.", teaser: "Can two master boxitects learn to work together?", coverUrl: "https://placehold.co/400x600/7c3aed/ffffff?text=Boxitects" },
                 { id: 3, title: "Change Sings: A Children's Anthem", author: "Amanda Gorman", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Poetry", summary: "Presidential Inaugural Poet Amanda Gorman shares a lyrical anthem about a young girl who leads a cast of characters on a musical journey, showing that they have the power to make changes in the world.", teaser: "I can hear change humming, in its loudest, proudest song.", coverUrl: "https://placehold.co/400x600/f59e0b/ffffff?text=Change+Sings" },
                 { id: 4, title: "Choosing Brave", author: "Angela Joy", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Biography", summary: "The story of how a girl, inspired by the Little Rock Nine, chooses to be brave and be the first to integrate her school.", teaser: "A powerful story about the courage of children.", coverUrl: "https://placehold.co/400x600/10b981/ffffff?text=Choosing+Brave" },
@@ -343,8 +350,6 @@
                 { id: 46, title: "Class Act", author: "Jerry Craft", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Graphic Novel", summary: "The sequel to 'New Kid,' this story follows Drew, one of Jordan's friends, as he navigates the challenges of being a student of color at a prestigious private school.", teaser: "Navigating friendships and finding your place.", coverUrl: "https://placehold.co/400x600/f97316/ffffff?text=Class+Act" },
                 { id: 47, title: "Dragon Hoops", author: "Gene Luen Yang", ageGroup: "13+", readingLevel: "Young Adult", genre: "Graphic Novel", summary: "A non-fiction graphic novel that follows the journey of a high school basketball team on their quest for a state championship, interwoven with the history of the sport.", teaser: "The true story of a team's journey to glory.", coverUrl: "https://placehold.co/400x600/ef4444/ffffff?text=Dragon+Hoops" },
                 { id: 48, title: "Heartstopper", author: "Alice Oseman", ageGroup: "13+", readingLevel: "Young Adult", genre: "Graphic Novel", summary: "A heartwarming and wholesome graphic novel about the budding romance between two British schoolboys, Charlie and Nick, exploring themes of love, friendship, and identity.", teaser: "Boy meets boy. Boys become friends. Boys fall in love.", coverUrl: "https://placehold.co/400x600/f472b6/ffffff?text=Heartstopper" },
-                
-                // --- NEW BOOKS ADDED BELOW ---
                 { id: 55, title: "Where the Wild Things Are", author: "Maurice Sendak", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Fantasy", summary: "A young boy named Max, after being sent to his room without supper, escapes to an island inhabited by magnificent, toothy creatures known as the Wild Things.", teaser: "Let the wild rumpus start!", coverUrl: "https://placehold.co/400x600/3f3f46/ffffff?text=Where+the\\nWild+Things\\nAre" },
                 { id: 56, title: "The Very Hungry Caterpillar", author: "Eric Carle", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "Follows the journey of a caterpillar as it eats its way through a wide variety of foodstuffs before pupating and emerging as a beautiful butterfly.", teaser: "He was a beautiful butterfly!", coverUrl: "https://placehold.co/400x600/4ade80/ffffff?text=The+Very\\nHungry\\nCaterpillar" },
                 { id: 57, title: "Goodnight Moon", author: "Margaret Wise Brown", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Family", summary: "In a great green room, a little bunny says goodnight to all the familiar things in the softly lit room, one by one.", teaser: "Goodnight noises everywhere.", coverUrl: "https://placehold.co/400x600/94a3b8/ffffff?text=Goodnight\\nMoon" },
@@ -404,6 +409,9 @@
             const noResultsDiv = document.getElementById('no-results');
             const bookModal = document.getElementById('book-modal');
             const modalContent = document.getElementById('modal-content');
+            const myListModal = document.getElementById('my-list-modal');
+            const myListModalContent = document.getElementById('my-list-modal-content');
+            const myListBtn = document.getElementById('my-list-btn');
             const myListCount = document.getElementById('my-list-count');
             const toast = document.getElementById('toast');
             const toastMessage = document.getElementById('toast-message');
@@ -544,6 +552,64 @@
                 document.body.style.overflow = 'auto';
             };
 
+            const openMyListModal = () => {
+                myListModalContent.innerHTML = ''; // Clear previous content
+
+                let content = `
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-white">My Reading List</h2>
+                        <button id="close-my-list-modal-btn" class="text-gray-400 hover:text-white transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                        </button>
+                    </div>
+                `;
+
+                if (myReadingList.length === 0) {
+                    content += `
+                        <div class="text-center py-12">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open-text mx-auto text-gray-600 mb-4"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/><path d="M6 8h2"/><path d="M6 12h2"/></svg>
+                            <h3 class="text-2xl font-semibold text-white mt-4">Your List is Empty</h3>
+                            <p class="text-gray-400 mt-2">Add books by clicking the heart icon!</p>
+                        </div>
+                    `;
+                } else {
+                    const listBooks = myReadingList.map(id => books.find(b => b.id === id));
+                    content += '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">';
+                    listBooks.forEach(book => {
+                        content += `
+                            <div class="bg-gray-800/50 rounded-lg p-4 flex flex-col items-center text-center">
+                                <img src="${book.coverUrl}" onerror="this.onerror=null;this.src='https://placehold.co/400x600/374151/ffffff?text=No+Image';" alt="Cover of ${book.title}" class="w-32 h-48 object-cover rounded-md mb-4 shadow-lg">
+                                <h4 class="font-bold text-md text-white">${book.title}</h4>
+                                <p class="text-sm text-gray-400 mb-4">${book.author}</p>
+                                <button class="remove-from-list-btn w-full bg-red-600/80 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition" data-book-id="${book.id}">Remove</button>
+                            </div>
+                        `;
+                    });
+                    content += '</div>';
+                }
+
+                myListModalContent.innerHTML = content;
+                myListModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+
+                document.getElementById('close-my-list-modal-btn').addEventListener('click', closeMyListModal);
+                
+                // Add event listeners for all remove buttons
+                document.querySelectorAll('.remove-from-list-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const bookId = parseInt(e.target.dataset.bookId);
+                        toggleFavorite(bookId);
+                        openMyListModal(); // Refresh the list modal content
+                    });
+                });
+            };
+
+            const closeMyListModal = () => {
+                myListModal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            };
+
+
             // --- FEATURE FUNCTIONS ---
             
             const speakTeaser = (text) => {
@@ -656,6 +722,7 @@
             genreFilterSelect.addEventListener('change', (e) => { filters.genre = e.target.value; applyFilters(); });
             clearFiltersBtn.addEventListener('click', resetFilters);
             document.getElementById('generate-ai-response').addEventListener('click', handleAIGuide);
+            myListBtn.addEventListener('click', openMyListModal);
             
             collectionCards.forEach(card => {
                 card.addEventListener('click', () => {
@@ -671,14 +738,25 @@
             });
 
             window.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && !bookModal.classList.contains('hidden')) {
-                    closeBookModal();
+                if (e.key === 'Escape') {
+                    if (!bookModal.classList.contains('hidden')) {
+                        closeBookModal();
+                    }
+                    if (!myListModal.classList.contains('hidden')) {
+                        closeMyListModal();
+                    }
                 }
             });
 
             bookModal.addEventListener('click', (e) => {
                 if (e.target === bookModal) {
                     closeBookModal();
+                }
+            });
+
+            myListModal.addEventListener('click', (e) => {
+                if (e.target === myListModal) {
+                    closeMyListModal();
                 }
             });
             
