@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boundless Books - Discover Your Next Story</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide-react@0.368.0/dist/lucide-react.js"></script>
+
+
+    <style>
+        /* Custom Styles for that 'Apple' feel */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #f3f4f6; /* A slightly softer white */
+        }
+
+        /* Gradient background with animation */
+        .gradient-bg {
+            background: linear-gradient(-45deg, #0a0a0a, #1a1a1a, #000022, #1a001a);
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
+        }
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Custom scrollbar for a sleek look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #4f46e5;
+            border-radius: 20px;
+            border: 2px solid #1a1a1a;
+        }
+
+        /* Glassmorphism effect for the header and modal */
+        .glass-effect {
+            background: rgba(17, 24, 39, 0.6); /* bg-gray-900 with opacity */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Input field styling */
+        .custom-input, .custom-select {
+            background-color: rgba(31, 41, 55, 0.5); /* bg-gray-800 with opacity */
+            border: 1px solid #4b5563; /* border-gray-600 */
+            color: #f3f4f6;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .custom-input:focus, .custom-select:focus {
+            outline: none;
+            border-color: #4f46e5; /* indigo-600 */
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.5);
+        }
+
+        /* Card hover effect */
+        .book-card, .collection-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid transparent;
+        }
+        .book-card:hover, .collection-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.5);
+            border-color: rgba(79, 70, 229, 0.5);
+        }
+
+        /* Modal animation */
+        .modal-container.hidden {
+            display: none;
+        }
+        .modal-container {
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .modal-content {
+            animation: slideUp 0.4s ease-out;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(50px) scale(0.95); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        /* Toast Notification */
+        #toast {
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            transform: translateY(100%);
+            opacity: 0;
+        }
+        #toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        #ai-response-content {
+            white-space: pre-wrap;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="gradient-bg">
+
+    <!-- Header -->
+    <header id="main-header" class="glass-effect fixed top-0 left-0 right-0 z-40">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-white tracking-wider">
+                Boundless <span class="text-indigo-400">Books</span>
+            </a>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#discover" class="text-gray-300 hover:text-white transition duration-300">Discover</a>
+                <a href="#featured-reads" class="text-gray-300 hover:text-white transition duration-300">Featured Reads</a>
+                <a href="#ai-guide" class="text-gray-300 hover:text-white transition duration-300">AI Guide</a>
+            </div>
+            <button id="my-list-btn" class="flex items-center space-x-2 border border-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-500 transition duration-300">
+                <span>My List</span>
+                <span id="my-list-count" class="bg-indigo-600 text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+            </button>
+        </nav>
+    </header>
+
+    <main class="pt-20">
+        <!-- Hero Section -->
+        <section class="min-h-[60vh] flex items-center justify-center text-center px-4 py-20">
+            <div class="max-w-4xl mx-auto">
+                <h1 class="text-5xl md:text-7xl font-extrabold text-white leading-tight mb-4">
+                    Discover Your Next Great Story.
+                </h1>
+                <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-8">
+                    An endless library at your fingertips. We use advanced filtering and personalized recommendations to connect young readers with books they'll love.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="#discover" class="w-full sm:w-auto bg-indigo-600 text-white font-semibold px-8 py-4 rounded-lg hover:bg-indigo-700 transition duration-300 transform hover:scale-105 shadow-lg shadow-indigo-600/30">Explore All Books</a>
+                    <a href="#ai-guide" class="w-full sm:w-auto bg-gray-700/50 border border-gray-600 text-white font-semibold px-8 py-4 rounded-lg hover:bg-gray-700 transition duration-300 transform hover:scale-105">Ask Our AI Guide</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Reads Section -->
+        <section id="featured-reads" class="py-20 sm:py-32 px-4">
+            <div class="container mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white">Featured Reads</h2>
+                    <p class="text-gray-400 mt-2 max-w-xl mx-auto">Hand-picked collections to spark curiosity and adventure.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Collection Card 1 -->
+                    <div data-genre="Historical Fiction" class="collection-card relative rounded-lg overflow-hidden cursor-pointer group">
+                        <img src="https://placehold.co/600x400/a16207/ffffff?text=Travel\\nThrough\\nTime" alt="Historical Fiction" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black/60 group-hover:bg-black/70 transition-colors duration-300"></div>
+                        <div class="absolute inset-0 p-8 flex flex-col justify-end">
+                            <h3 class="text-2xl font-bold text-white">Travel Through Time</h3>
+                            <p class="text-gray-300 mt-1">Journey into the past with these exciting tales.</p>
+                        </div>
+                    </div>
+                     <!-- Collection Card 2 -->
+                    <div data-genre="Graphic Novel" class="collection-card relative rounded-lg overflow-hidden cursor-pointer group">
+                        <img src="https://placehold.co/600x400/f59e0b/ffffff?text=Graphic\\nNovels" alt="Graphic Novels" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black/60 group-hover:bg-black/70 transition-colors duration-300"></div>
+                        <div class="absolute inset-0 p-8 flex flex-col justify-end">
+                            <h3 class="text-2xl font-bold text-white">Graphic Novels For All</h3>
+                            <p class="text-gray-300 mt-1">Visual storytelling that pops off the page.</p>
+                        </div>
+                    </div>
+                     <!-- Collection Card 3 -->
+                    <div data-genre="Sci-Fi" class="collection-card relative rounded-lg overflow-hidden cursor-pointer group">
+                        <img src="https://placehold.co/600x400/8b5cf6/ffffff?text=Sci-Fi\\nWorlds" alt="Sci-Fi Worlds" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black/60 group-hover:bg-black/70 transition-colors duration-300"></div>
+                        <div class="absolute inset-0 p-8 flex flex-col justify-end">
+                            <h3 class="text-2xl font-bold text-white">Out of this World Sci-Fi</h3>
+                            <p class="text-gray-300 mt-1">Explore distant galaxies and future technologies.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Reading Guide Section -->
+        <section id="ai-guide" class="py-20 sm:py-32 px-4 bg-black/20">
+            <div class="container mx-auto max-w-3xl text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Personalized AI Reading Guide</h2>
+                <p class="text-gray-400 mb-8 max-w-2xl mx-auto">
+                    Don't know where to start? Describe the reader's interests, age, and what they enjoy, and our AI will generate a personalized reading list just for you.
+                </p>
+                <div class="max-w-xl mx-auto space-y-4 mb-8">
+                    <textarea id="ai-prompt" class="w-full h-24 p-4 rounded-lg custom-input text-base" placeholder="e.g., A funny mystery for a 7-year-old who just started reading chapter books..."></textarea>
+                    <button id="generate-ai-response" class="w-full bg-indigo-600 text-white font-semibold py-3 rounded-lg hover:bg-indigo-700 transition duration-300 flex items-center justify-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+                        <span>Generate Recommendations</span>
+                    </button>
+                </div>
+
+                <div id="ai-response-container" class="min-h-[100px] text-left">
+                     <div id="ai-loading-spinner" class="hidden text-center text-gray-400 flex flex-col items-center justify-center h-full">
+                         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-400"></div>
+                         <p class="mt-4">Generating your reading list...</p>
+                     </div>
+                    <div id="ai-response-content" class="text-gray-300 hidden leading-relaxed bg-gray-900/50 border border-gray-800 rounded-lg p-6"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Book Discovery Section -->
+        <section id="discover" class="py-20 sm:py-32 px-4">
+            <div class="container mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white">Explore the Library</h2>
+                    <p class="text-gray-400 mt-2 max-w-xl mx-auto">Use our powerful filters to find the perfect book for any reader.</p>
+                </div>
+
+                <!-- Filters -->
+                <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-6 mb-12 sticky top-20 z-30 backdrop-blur-sm">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                        <!-- Search Filter -->
+                        <div>
+                            <label for="search" class="block text-sm font-medium text-gray-300 mb-2">Search by Title or Author</label>
+                            <input type="text" id="search" name="search" placeholder="e.g., Harry Potter" class="w-full p-3 rounded-lg custom-input">
+                        </div>
+                        <!-- Age Group Filter -->
+                        <div>
+                            <label for="age-group" class="block text-sm font-medium text-gray-300 mb-2">Age Group</label>
+                            <select id="age-group" name="age-group" class="w-full p-3 rounded-lg custom-select appearance-none">
+                                <option value="all">All Ages</option>
+                                <option value="4-6">4-6 Years</option>
+                                <option value="7-9">7-9 Years</option>
+                                <option value="10-12">10-12 Years</option>
+                                <option value="13+">13+ Years</option>
+                            </select>
+                        </div>
+                        <!-- Reading Level Filter -->
+                        <div>
+                            <label for="reading-level" class="block text-sm font-medium text-gray-300 mb-2">Reading Level</label>
+                            <select id="reading-level" name="reading-level" class="w-full p-3 rounded-lg custom-select appearance-none">
+                                <option value="all">All Levels</option>
+                                <option value="Picture Book">Picture Book</option>
+                                <option value="Easy Reader">Easy Reader</option>
+                                <option value="Chapter Book">Chapter Book</option>
+                                <option value="Middle Grade">Middle Grade</option>
+                                <option value="Young Adult">Young Adult</option>
+                            </select>
+                        </div>
+                        <!-- Genre Filter -->
+                        <div>
+                             <label for="genre" class="block text-sm font-medium text-gray-300 mb-2">Genre</label>
+                            <select id="genre" name="genre" class="w-full p-3 rounded-lg custom-select appearance-none">
+                                 <option value="all">All Genres</option>
+                                 <option value="Fantasy">Fantasy</option>
+                                 <option value="Adventure">Adventure</option>
+                                 <option value="Mystery">Mystery</option>
+                                 <option value="Sci-Fi">Science Fiction</option>
+                                 <option value="Humor">Humor</option>
+                                 <option value="Realistic Fiction">Realistic Fiction</option>
+                                 <option value="Graphic Novel">Graphic Novel</option>
+                                 <option value="Historical Fiction">Historical Fiction</option>
+                                 <option value="Biography">Biography</option>
+                                 <option value="Poetry">Poetry</option>
+                            </select>
+                        </div>
+                         <!-- Clear Filters Button -->
+                        <div class="lg:col-span-1 flex items-end">
+                            <button id="clear-filters-btn" class="w-full bg-gray-600 text-white font-semibold p-3 rounded-lg hover:bg-gray-700 transition duration-300">Clear Filters</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Count and Book Grid -->
+                <p id="results-count" class="text-gray-400 mb-6"></p>
+                <div id="book-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+                    <!-- Book cards will be injected here by JavaScript -->
+                </div>
+                 <div id="no-results" class="hidden text-center py-20">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-x mx-auto text-gray-600 mb-4"><path d="m13.5 8.5-5 5"/><path d="m8.5 8.5 5 5"/><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    <h3 class="text-2xl font-semibold text-white">No Books Found</h3>
+                    <p class="text-gray-400 mt-2">Try adjusting your filters to find what you're looking for.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900/50 border-t border-gray-800 mt-20">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-400">
+            <p>&copy; 2025 Boundless Books. A project by Nate & Yash.</p>
+            <p class="text-sm mt-2">Designed to foster a lifelong love for reading.</p>
+        </div>
+    </footer>
+
+
+    <!-- Book Detail Modal -->
+    <div id="book-modal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-4 modal-container">
+        <div id="modal-content" class="modal-content bg-gray-900 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto relative shadow-2xl shadow-indigo-900/20 border border-gray-700">
+           <!-- Content will be injected by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-indigo-600 text-white py-3 px-6 rounded-lg shadow-lg flex items-center space-x-3 z-50">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        <span id="toast-message"></span>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- DATABASE ---
+            const books = [
+                // Picture Books (Ages 4-6)
+                { id: 1, title: "Awâsis and the World-Famous Bannock", author: "Dallas Hunt", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "A young Cree child, Awâsis, loses their Kôhkum's freshly made bannock. With the help of animal friends, Awâsis retraces their steps to find the treasured food.", teaser: "Follow Awâsis on a delightful adventure through the forest." },
+                { id: 2, title: "Boxitects", author: "Kim Smith", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "Meg is a 'boxitect,' an architect who builds with boxes. When another boxitect, Simone, joins her class, they must learn to collaborate on a grand project for the annual Maker Match.", teaser: "Can two master boxitects learn to work together?" },
+                { id: 3, title: "Change Sings: A Children's Anthem", author: "Amanda Gorman", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Poetry", summary: "Presidential Inaugural Poet Amanda Gorman shares a lyrical anthem about a young girl who leads a cast of characters on a musical journey, showing that they have the power to make changes in the world.", teaser: "I can hear change humming, in its loudest, proudest song." },
+                { id: 4, title: "Choosing Brave", author: "Angela Joy", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Biography", summary: "The story of how a girl, inspired by the Little Rock Nine, chooses to be brave and be the first to integrate her school.", teaser: "A powerful story about the courage of children." },
+                { id: 5, title: "Eyes That Kiss in the Corners", author: "Joanna Ho", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "A young Asian girl notices that her eyes look different from her peers'. She learns to recognize her own beauty and celebrate the legacy of her family.", teaser: "A lyrical, heartfelt celebration of Asian heritage." },
+                { id: 6, title: "Finding the Music/En pos de la música", author: "Jennifer Torres", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "When her grandfather's mariachi guitar is accidentally damaged, Reyna must find someone to fix it. Her journey through her community reveals a hidden history.", teaser: "A bilingual story of family, community, and the music that connects us." },
+                { id: 7, title: "I Want 100 Dogs", author: "Stacy McAnulty", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Humor", summary: "A girl makes a presentation to her parents on why she needs not one, not ten, but one hundred dogs. A hilarious and imaginative plea for more pets.", teaser: "It's not just a want, it's a need. For 100 dogs." },
+                { id: 8, title: "Knight Owl", author: "Christopher Denise", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Fantasy", summary: "A determined little owl dreams of becoming a knight. Though he may not be the biggest or strongest, his cleverness might be just what the castle needs to solve its dragon problem.", teaser: "Since the day he hatched, Owl dreamed of becoming a real knight." },
+                { id: 9, title: "Bright Star", author: "Yuyi Morales", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Fantasy", summary: "An ethereal and hopeful story of a young fawn navigating a beautiful but sometimes dangerous world, offering a message of resilience and belonging.", teaser: "A beautiful, heartfelt story for the times we live in." },
+                { id: 10, title: "A Different Pond", author: "Bao Phi", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "A powerful, honest glimpse into a relationship between a father and son - and between cultures, old and new. A story of immigration and fishing.", teaser: "A fishing trip on a Minneapolis lake is a small adventure." },
+                { id: 11, title: "Flashlight Night", author: "Matt Forrest Esenwine", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Fantasy", summary: "Three children use a flashlight to imagine a world of adventure in their backyard, transforming ordinary objects into fantastical scenes.", teaser: "What worlds can you discover when you have a flashlight?" },
+                { id: 12, title: "Lost and Found Cat", author: "Doug Kuntz", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Biography", summary: "The true story of an Iraqi family who was separated from their beloved pet cat, Kunkush, and the international effort to reunite them.", teaser: "A heartwarming, true story of a refugee family." },
+                { id: 13, title: "My Hair Is a Garden", author: "Cozbi A. Cabrera", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "After being teased about her hair, MacKenzie learns from her neighbor how to care for her natural hair, seeing it as a beautiful garden.", teaser: "A story about self-acceptance and natural beauty." },
+                { id: 14, title: "Natsumi!", author: "Susan Lendroth", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "Natsumi is a little girl who is great at being loud and dramatic, but she struggles with traditional Japanese arts. She finally finds the perfect way to express herself at the summer festival.", teaser: "Natsumi wasn't good at being quiet." },
+
+                // Easy Readers / Chapter Books (Ages 7-9)
+                { id: 15, title: "Ada Twist and the Perilous Pants", author: "Andrea Beaty", ageGroup: "7-9", readingLevel: "Chapter Book", genre: "Mystery", summary: "Ada Twist is a young scientist with a big imagination. When her dad's favorite pants get ruined, she uses the scientific method to solve the mystery.", teaser: "A mystery with a super-scientist and her friends." },
+                { id: 16, title: "Arlo & Pips: King of the Birds", author: "Elise Gravel", ageGroup: "7-9", readingLevel: "Chapter Book", genre: "Humor", summary: "Arlo the crow is a witty bird who loves to boast about his intelligence. This graphic chapter book is full of funny facts about crows and city wildlife.", teaser: "Arlo the crow is no ordinary bird." },
+                { id: 17, title: "Bunbun & Bonbon: Fancy Friends", author: "Jess Keating", ageGroup: "7-9", readingLevel: "Chapter Book", genre: "Graphic Novel", summary: "A sweet and funny graphic novel about an adorable bunny and his best friend, a fancy piece of candy, as they embark on various adventures.", teaser: "Meet Bunbun, a very sweet bunny. And his best friend, Bonbon." },
+                { id: 18, title: "Evelyn Del Rey Is Moving Away", author: "Meg Medina", ageGroup: "7-9", readingLevel: "Easy Reader", genre: "Realistic Fiction", summary: "Two best friends, Evelyn and Daniela, spend one last day together before Evelyn moves away. A touching story about friendship and saying goodbye.", teaser: "A beautifully illustrated story of friendship." },
+                { id: 19, title: "Meet Yasmin!", author: "Saadia Faruqi", ageGroup: "7-9", readingLevel: "Easy Reader", genre: "Realistic Fiction", summary: "Yasmin is a creative second-grader who is always ready for an adventure. This book contains four short stories about her life as an explorer, painter, and builder.", teaser: "A creative Pakistani-American girl with a big imagination." },
+                { id: 20, title: "I Survived the Shark Attacks of 1916", author: "Lauren Tarshis", ageGroup: "7-9", readingLevel: "Chapter Book", genre: "Historical Fiction", summary: "A young boy is fascinated by sharks and the ocean, but his excitement turns to terror when a series of shark attacks plague the Jersey Shore.", teaser: "A gripping tale of survival based on true events." },
+                { id: 21, title: "Jo Jo Makoons: The Used-to-Be Best Friend", author: "Dawn Quigley", ageGroup: "7-9", readingLevel: "Chapter Book", genre: "Realistic Fiction", summary: "Jo Jo Makoons is a spirited first-grader from an Ojibwe reservation navigating the ups and downs of friendship and school life.", teaser: "Her best friend isn't her best friend anymore." },
+                { id: 22, title: "The Poet's Dog", author: "Patricia MacLachlan", ageGroup: "7-9", readingLevel: "Chapter Book", genre: "Fantasy", summary: "A dog, gifted with the ability to understand language by his poet owner, rescues two children lost in a snowstorm and leads them to safety in his cozy cabin.", teaser: "A touching story of loss, love, and the power of words." },
+
+                // Middle Grade (Ages 10-12)
+                { id: 23, title: "Big Tree", author: "Brian Selznick", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Fantasy", summary: "Two sycamore seeds, Louise and Merwin, are propelled into the world during a volcanic eruption and embark on a perilous journey through time to find a safe place to grow.", teaser: "A story of hope, resilience, and the interconnectedness of life." },
+                { id: 24, title: "Blended", author: "Sharon M. Draper", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Realistic Fiction", summary: "Isabella's blended family is more than just black and white. She feels pulled between her divorced parents and their new lives, struggling to find her own identity.", teaser: "A poignant story about a biracial girl's journey." },
+                { id: 25, title: "The Dreamatics", author: "Michelle Cuevas", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Fantasy", summary: "A group of creatures called the Dreamatics are responsible for producing one girl's dreams. When she starts having nightmares, they must venture into the real world to save her.", teaser: "Ever wonder where dreams come from?" },
+                { id: 26, title: "Ellie, Engineer", author: "Jackson Pearce", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Realistic Fiction", summary: "Ellie is a budding engineer who loves to build. She puts her skills to the test to design the perfect gift for her best friend's birthday.", teaser: "A fun story celebrating STEM, creativity, and friendship." },
+                { id: 27, title: "Get a Grip, Vivy Cohen!", author: "Sarah Kapit", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Realistic Fiction", summary: "Vivy Cohen, an autistic girl with a wicked knuckleball, writes letters to her hero, a major league pitcher, as she navigates playing on a boys' baseball team.", teaser: "A story about autism, baseball, and self-advocacy." },
+                { id: 28, title: "Green", author: "Alex Gino", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Realistic Fiction", summary: "A story about a nonbinary kid named Green who is navigating identity, friendship, and family. A thoughtful exploration of gender and what it means to be yourself.", teaser: "A powerful and gentle story about being true to yourself." },
+                { id: 29, title: "Hatchet", author: "Gary Paulsen", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Adventure", summary: "After a plane crash, 13-year-old Brian Robeson is stranded in the Canadian wilderness with nothing but a hatchet. He must learn to survive on his own.", teaser: "A classic tale of survival and self-reliance." },
+                { id: 30, title: "One Crazy Summer", author: "Rita Williams-Garcia", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Historical Fiction", summary: "Three sisters travel to Oakland, California, in 1968 to spend the summer with the mother who abandoned them, and find themselves in the midst of the Black Panther movement.", teaser: "A powerful story of family, identity, and history." },
+                { id: 31, title: "The Parker Inheritance", author: "Varian Johnson", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Mystery", summary: "Candice finds a mysterious letter that leads her and a friend on a treasure hunt through their town's history, uncovering a story of prejudice and injustice.", teaser: "A compelling mystery that weaves past and present." },
+                { id: 32, title: "The Sea in Winter", author: "Christine Day", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Realistic Fiction", summary: "After a ballet injury, Maisie feels lost and disconnected from her Native American heritage. A family trip helps her find a new path to healing.", teaser: "A story about resilience, family, and finding your way back." },
+                { id: 33, title: "The Stars Beneath Our Feet", author: "David Barclay Moore", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Realistic Fiction", summary: "A boy grieving his brother's death finds solace and a new path forward by building an elaborate LEGO city.", teaser: "A powerful story about grief, creativity, and community." },
+
+                // Young Adult (Ages 13+)
+                { id: 34, title: "All Boys Aren't Blue: A Memoir-Manifesto", author: "George M. Johnson", ageGroup: "13+", readingLevel: "Young Adult", genre: "Biography", summary: "A series of personal essays from journalist and activist George M. Johnson, exploring their childhood and adolescence growing up as a Black queer boy in New Jersey.", teaser: "A powerful and unflinching look at identity." },
+                { id: 35, title: "All of This Is True", author: "Lygia Day Peñaflor", ageGroup: "13+", readingLevel: "Young Adult", genre: "Mystery", summary: "Four teens befriend their favorite author, only to find their darkest secrets exposed in her next bestselling book. A thrilling look at the dark side of fandom.", teaser: "Be careful who you trust." },
+                { id: 36, title: "As Long as the Lemon Trees Grow", author: "Zoulfa Katouh", ageGroup: "13+", readingLevel: "Young Adult", genre: "Historical Fiction", summary: "A pharmacy student in war-torn Syria is torn between her duty to her country and her desire to escape to safety, all while being haunted by a manifestation of her fear.", teaser: "A heartbreaking and hopeful story of love and war." },
+                { id: 37, title: "The Black Veins", author: "Ashia Monet", ageGroup: "13+", readingLevel: "Young Adult", genre: "Fantasy", summary: "In a world where magic is a commodity, a group of Black magicians embark on a road trip across the country to find a hidden magical city and save their families.", teaser: "A contemporary fantasy adventure about found family." },
+                { id: 38, title: "The Desolations of Devil's Acre", author: "Ransom Riggs", ageGroup: "13+", readingLevel: "Young Adult", genre: "Fantasy", summary: "The final installment in the Miss Peregrine's Home for Peculiar Children series, where Jacob and his friends must face their greatest challenge yet to save all of peculiarity.", teaser: "The epic conclusion to the peculiar children saga." },
+                { id: 39, title: "Ghost Wood Song", author: "Erica Waters", ageGroup: "13+", readingLevel: "Young Adult", genre: "Mystery", summary: "Shady Grove can call ghosts with her fiddle. When her brother is accused of murder, she must use her haunted ability to clear his name, uncovering dark family secrets along the way.", teaser: "A haunting southern gothic mystery." },
+                { id: 40, title: "Gilded", author: "Marissa Meyer", ageGroup: "13+", readingLevel: "Young Adult", genre: "Fantasy", summary: "A dark and romantic retelling of the Rumpelstiltskin fairy tale, filled with curses, secrets, and a captivating love story.", teaser: "A cursed girl, a haunted king, and a deal with the dark one." },
+                { id: 41, title: "Gwen & Art Are Not in Love", author: "Lex Croucher", ageGroup: "13+", readingLevel: "Young Adult", genre: "Historical Fiction", summary: "A queer, medieval rom-com where the princess and the knight-in-training are betrothed but secretly in love with other people. They team up to navigate courtly life and find their own happy endings.", teaser: "A fun, anachronistic take on Arthurian legend." },
+                { id: 42, title: "The House in the Cerulean Sea", author: "TJ Klune", ageGroup: "13+", readingLevel: "Young Adult", genre: "Fantasy", summary: "A by-the-book case worker is sent to a remote island orphanage for magical children and finds an unexpected family in the most unlikely of places.", teaser: "A heartwarming and enchanting story about found family." },
+                { id: 43, title: "They Both Die at the End", author: "Adam Silvera", ageGroup: "13+", readingLevel: "Young Adult", genre: "Realistic Fiction", summary: "In a world where an app can predict your death day, two boys, Mateo and Rufus, connect on their last day to live a lifetime of adventure together.", teaser: "A devastating yet uplifting story about life and loss." },
+                { id: 44, title: "Watch Us Rise", author: "Renée Watson and Ellen Hagan", ageGroup: "13+", readingLevel: "Young Adult", genre: "Realistic Fiction", summary: "Two best friends start a feminist blog and club at their high school to challenge sexism and give a voice to their fellow students, facing backlash along the way.", teaser: "A powerful story about activism and friendship." },
+
+                // Graphic Novels (Various Ages)
+                { id: 45, title: "Act (A Click Graphic Novel)", author: "Kayla Miller", ageGroup: "7-9", readingLevel: "Chapter Book", genre: "Graphic Novel", summary: "Olive is passionate about a cause and wants to make a difference. This graphic novel explores student activism, friendship, and finding your voice.", teaser: "How can one girl make a difference?" },
+                { id: 46, title: "Class Act", author: "Jerry Craft", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Graphic Novel", summary: "The sequel to 'New Kid,' this story follows Drew, one of Jordan's friends, as he navigates the challenges of being a student of color at a prestigious private school.", teaser: "Navigating friendships and finding your place." },
+                { id: 47, title: "Dragon Hoops", author: "Gene Luen Yang", ageGroup: "13+", readingLevel: "Young Adult", genre: "Graphic Novel", summary: "A non-fiction graphic novel that follows the journey of a high school basketball team on their quest for a state championship, interwoven with the history of the sport.", teaser: "The true story of a team's journey to glory." },
+                { id: 48, title: "Heartstopper", author: "Alice Oseman", ageGroup: "13+", readingLevel: "Young Adult", genre: "Graphic Novel", summary: "A heartwarming and wholesome graphic novel about the budding romance between two British schoolboys, Charlie and Nick, exploring themes of love, friendship, and identity.", teaser: "Boy meets boy. Boys become friends. Boys fall in love." },
+                { id: 49, title: "March: Book One", author: "John Lewis, Andrew Aydin, and Nate Powell", ageGroup: "13+", readingLevel: "Young Adult", genre: "Graphic Novel", summary: "A firsthand account of Congressman John Lewis's lifelong struggle for civil and human rights, beginning with his youth in rural Alabama.", teaser: "A vivid and powerful memoir of the Civil Rights Movement." },
+                { id: 50, title: "Measuring Up", author: "Lily LaMotte and Ann Xu", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Graphic Novel", summary: "Cici, a young Taiwanese immigrant, enters a cooking competition to win the money to fly her grandmother to the U.S. for her birthday, all while navigating a new school and culture.", teaser: "A story about family, food, and finding your place." },
+                { id: 51, title: "The Oracle Code", author: "Marieke Nijkamp and Manuel Preitano", ageGroup: "13+", readingLevel: "Young Adult", genre: "Graphic Novel", summary: "A reimagining of Barbara Gordon (Batgirl) as a teen hacker who, after a tragic accident, must solve a mystery at her creepy new rehabilitation center.", teaser: "A tense, atmospheric mystery." },
+                { id: 52, title: "Poe: Stories and Poems", author: "Gareth Hinds", ageGroup: "13+", readingLevel: "Young Adult", genre: "Graphic Novel", summary: "A graphic novel adaptation of some of Edgar Allan Poe's most famous and haunting works, including 'The Raven' and 'The Cask of Amontillado'.", teaser: "Classic horror brought to life in stunning visuals." },
+                { id: 53, title: "Sanity & Tallulah", author: "Molly Brooks", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Graphic Novel", summary: "On a space station, two best friends, Sanity and Tallulah, have to find their illegal, three-headed kitten after it escapes and causes chaos.", teaser: "A fun sci-fi adventure with a genetically engineered cat." },
+                { id: 54, title: "When Stars Are Scattered", author: "Victoria Jamieson and Omar Mohamed", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Graphic Novel", summary: "The true story of two Somali brothers growing up in a refugee camp in Kenya, and their long journey to find a new home.", teaser: "A powerful story of hope, resilience, and family." },
+            ];
+
+            // --- STATE MANAGEMENT ---
+            let filters = {
+                search: '',
+                ageGroup: 'all',
+                readingLevel: 'all',
+                genre: 'all'
+            };
+            let myReadingList = [];
+            let speech = new SpeechSynthesisUtterance();
+
+            // --- DOM ELEMENTS ---
+            const bookGrid = document.getElementById('book-grid');
+            const resultsCount = document.getElementById('results-count');
+            const noResultsDiv = document.getElementById('no-results');
+            const bookModal = document.getElementById('book-modal');
+            const modalContent = document.getElementById('modal-content');
+            const myListCount = document.getElementById('my-list-count');
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            const collectionCards = document.querySelectorAll('.collection-card');
+            const discoverSection = document.getElementById('discover');
+            const genreFilterSelect = document.getElementById('genre');
+            const searchInput = document.getElementById('search');
+            const ageGroupSelect = document.getElementById('age-group');
+            const readingLevelSelect = document.getElementById('reading-level');
+            const clearFiltersBtn = document.getElementById('clear-filters-btn');
+
+
+            // --- RENDER & FILTER FUNCTIONS ---
+
+            const renderBooks = (bookList) => {
+                bookGrid.innerHTML = ''; // Clear existing grid
+                if (bookList.length === 0) {
+                    noResultsDiv.classList.remove('hidden');
+                    resultsCount.textContent = 'Found 0 books matching your criteria.';
+                } else {
+                    noResultsDiv.classList.add('hidden');
+                    resultsCount.textContent = `Showing ${bookList.length} of ${books.length} books.`;
+                }
+
+                bookList.forEach(book => {
+                    const isFavorite = myReadingList.includes(book.id);
+                    const card = document.createElement('div');
+                    card.className = 'book-card bg-gray-900/50 rounded-lg overflow-hidden cursor-pointer flex flex-col border border-gray-800';
+                    card.innerHTML = `
+                        <img src="${book.cover}" alt="Cover of ${book.title}" class="w-full h-auto object-cover aspect-[2/3]">
+                        <div class="p-4 flex flex-col flex-grow">
+                            <h3 class="font-bold text-lg text-white truncate">${book.title}</h3>
+                            <p class="text-sm text-gray-400 mb-2">${book.author}</p>
+                            <div class="mt-auto flex justify-between items-center pt-2">
+                                <span class="text-xs font-semibold text-indigo-400 bg-indigo-900/50 px-2 py-1 rounded">${book.genre}</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="${isFavorite ? '#ef4444' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart text-red-500 favorite-icon-grid" data-book-id="${book.id}">
+                                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    `;
+                    card.addEventListener('click', (e) => {
+                        if (!e.target.closest('.favorite-icon-grid')) {
+                            openBookModal(book.id);
+                        }
+                    });
+                    bookGrid.appendChild(card);
+                });
+            };
+
+            const applyFilters = () => {
+                let filteredBooks = [...books];
+                if (filters.search) {
+                    const searchTerm = filters.search.toLowerCase();
+                    filteredBooks = filteredBooks.filter(book => 
+                        book.title.toLowerCase().includes(searchTerm) || 
+                        book.author.toLowerCase().includes(searchTerm)
+                    );
+                }
+                if (filters.ageGroup !== 'all') {
+                    filteredBooks = filteredBooks.filter(book => book.ageGroup === filters.ageGroup);
+                }
+                if (filters.readingLevel !== 'all') {
+                    filteredBooks = filteredBooks.filter(book => book.readingLevel === filters.readingLevel);
+                }
+                if (filters.genre !== 'all') {
+                    filteredBooks = filteredBooks.filter(book => book.genre === filters.genre);
+                }
+                renderBooks(filteredBooks);
+            };
+
+            const resetFilters = () => {
+                filters = { search: '', ageGroup: 'all', readingLevel: 'all', genre: 'all' };
+                searchInput.value = '';
+                ageGroupSelect.value = 'all';
+                readingLevelSelect.value = 'all';
+                genreFilterSelect.value = 'all';
+                applyFilters();
+            };
+
+            // --- MODAL FUNCTIONS ---
+
+            const openBookModal = (bookId) => {
+                const book = books.find(b => b.id === bookId);
+                if (!book) return;
+
+                const isFavorite = myReadingList.includes(book.id);
+
+                modalContent.innerHTML = `
+                    <button id="close-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white transition z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                    </button>
+                    <div class="grid md:grid-cols-3 gap-8 p-6 md:p-8">
+                        <div class="md:col-span-1">
+                            <img src="${book.cover}" alt="Cover of ${book.title}" class="w-full h-auto object-cover rounded-lg shadow-lg">
+                        </div>
+                        <div class="md:col-span-2">
+                            <h2 class="text-3xl font-bold text-white mb-1">${book.title}</h2>
+                            <p class="text-lg text-gray-400 mb-4">by ${book.author}</p>
+
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="text-sm font-semibold text-indigo-300 bg-indigo-900/50 px-3 py-1 rounded-full">${book.ageGroup} years</span>
+                                <span class="text-sm font-semibold text-teal-300 bg-teal-900/50 px-3 py-1 rounded-full">${book.readingLevel}</span>
+                                <span class="text-sm font-semibold text-amber-300 bg-amber-900/50 px-3 py-1 rounded-full">${book.genre}</span>
+                            </div>
+
+                            <h3 class="text-xl font-semibold text-white mb-2">Summary</h3>
+                            <p class="text-gray-300 mb-6">${book.summary}</p>
+
+                            <h3 class="text-xl font-semibold text-white mb-2">Teaser</h3>
+                            <p class="text-gray-400 italic mb-6">"${book.teaser}"</p>
+
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <button id="read-aloud-btn" class="w-full sm:w-auto flex-1 bg-green-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-700 transition flex items-center justify-center space-x-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+                                    <span>Read Teaser Aloud</span>
+                                </button>
+                                <button id="toggle-favorite-btn" data-book-id="${book.id}" class="w-full sm:w-auto flex-1 border border-red-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-red-500 transition flex items-center justify-center space-x-2 ${isFavorite ? 'bg-red-500' : ''}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="${isFavorite ? 'white' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart favorite-icon-modal"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                                    <span id="favorite-btn-text">${isFavorite ? 'Remove from List' : 'Add to My List'}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                bookModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+
+                document.getElementById('close-modal-btn').addEventListener('click', closeBookModal);
+                document.getElementById('read-aloud-btn').addEventListener('click', () => speakTeaser(book.teaser));
+                document.getElementById('toggle-favorite-btn').addEventListener('click', () => toggleFavorite(book.id));
+            };
+
+            const closeBookModal = () => {
+                window.speechSynthesis.cancel();
+                bookModal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            };
+
+            // --- FEATURE FUNCTIONS ---
+
+            const speakTeaser = (text) => {
+                window.speechSynthesis.cancel();
+                speech.text = text;
+                speech.volume = 1;
+                speech.rate = 1;
+                speech.pitch = 1;
+                window.speechSynthesis.speak(speech);
+            };
+
+            const toggleFavorite = (bookId) => {
+                const bookIndex = myReadingList.indexOf(bookId);
+                if (bookIndex > -1) {
+                    myReadingList.splice(bookIndex, 1);
+                    showToast('Removed from My List');
+                } else {
+                    myReadingList.push(bookId);
+                    showToast('Added to My List');
+                }
+
+                myListCount.textContent = myReadingList.length;
+                applyFilters();
+
+                const modalFavoriteBtn = document.getElementById('toggle-favorite-btn');
+                if (modalFavoriteBtn && parseInt(modalFavoriteBtn.dataset.bookId) === bookId) {
+                    const isFavorite = myReadingList.includes(bookId);
+                    modalFavoriteBtn.classList.toggle('bg-red-500', isFavorite);
+                    modalFavoriteBtn.querySelector('.favorite-icon-modal').style.fill = isFavorite ? 'white' : 'none';
+                    document.getElementById('favorite-btn-text').textContent = isFavorite ? 'Remove from List' : 'Add to My List';
+                }
+            };
+
+            const showToast = (message) => {
+                toastMessage.textContent = message;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            };
+
+            // --- AI GUIDE FUNCTIONS (SECURE BACKEND VERSION) ---
+            const handleAIGuide = async () => {
+                const userPrompt = document.getElementById('ai-prompt').value;
+                const spinner = document.getElementById('ai-loading-spinner');
+                const responseContent = document.getElementById('ai-response-content');
+
+                if (!userPrompt.trim()) {
+                    responseContent.textContent = 'Please enter a description to get recommendations.';
+                    responseContent.classList.remove('hidden');
+                    spinner.classList.add('hidden');
+                    return;
+                }
+
+                responseContent.classList.add('hidden');
+                spinner.classList.remove('hidden');
+
+                const bookListForAI = books.map(b => `Title: ${b.title}, Author: ${b.author}, Summary: ${b.summary}`).join('\n');
+
+                try {
+                    // This now calls YOUR secure API endpoint, not Google's.
+                    const apiResponse = await fetch('/api/recommendations', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            userPrompt: userPrompt,
+                            bookList: bookListForAI 
+                        })
+                    });
+
+                    const result = await apiResponse.json();
+
+                    if (!apiResponse.ok) {
+                        throw new Error(result.error || `Request failed with status ${apiResponse.status}`);
+                    }
+
+                    let aiResponseText = "Sorry, I couldn't generate recommendations. The AI might be temporarily unavailable.";
+                    if (result.candidates && result.candidates.length > 0) {
+                        aiResponseText = result.candidates[0].content.parts[0].text;
+                    }
+
+                    spinner.classList.add('hidden');
+                    responseContent.textContent = ''; 
+                    responseContent.classList.remove('hidden');
+
+                    let i = 0;
+                    function typeWriter() {
+                        if (i < aiResponseText.length) {
+                             responseContent.textContent += aiResponseText.charAt(i);
+                             i++;
+                             setTimeout(typeWriter, 15);
+                        }
+                    }
+                    typeWriter();
+
+                } catch (error) {
+                    console.error("AI Guide Frontend Error:", error);
+                    spinner.classList.add('hidden');
+                    responseContent.textContent = `Sorry, an error occurred: ${error.message}`;
+                    responseContent.classList.remove('hidden');
+                }
+            };
+
+
+            // --- EVENT LISTENERS ---
+
+            searchInput.addEventListener('input', (e) => { filters.search = e.target.value; applyFilters(); });
+            ageGroupSelect.addEventListener('change', (e) => { filters.ageGroup = e.target.value; applyFilters(); });
+            readingLevelSelect.addEventListener('change', (e) => { filters.readingLevel = e.target.value; applyFilters(); });
+            genreFilterSelect.addEventListener('change', (e) => { filters.genre = e.target.value; applyFilters(); });
+            clearFiltersBtn.addEventListener('click', resetFilters);
+            document.getElementById('generate-ai-response').addEventListener('click', handleAIGuide);
+
+            collectionCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const genre = card.dataset.genre;
+                    if (genre) {
+                        resetFilters();
+                        genreFilterSelect.value = genre;
+                        filters.genre = genre;
+                        applyFilters();
+                        discoverSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !bookModal.classList.contains('hidden')) {
+                    closeBookModal();
+                }
+            });
+
+            bookModal.addEventListener('click', (e) => {
+                if (e.target === bookModal) {
+                    closeBookModal();
+                }
+            });
+
+            bookGrid.addEventListener('click', (e) => {
+                const heartIcon = e.target.closest('.favorite-icon-grid');
+                if (heartIcon) {
+                    const bookId = parseInt(heartIcon.dataset.bookId);
+                    toggleFavorite(bookId);
+                }
+            });
+
+            // --- INITIALIZATION ---
+            applyFilters();
+        });
+    </script>
+
+</body>
+</html>
