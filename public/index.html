@@ -31,7 +31,7 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-
+        
         /* Custom scrollbar for a sleek look */
         ::-webkit-scrollbar {
             width: 8px;
@@ -106,7 +106,7 @@
             transform: translateY(0);
             opacity: 1;
         }
-
+        
         #ai-response-content {
             white-space: pre-wrap;
             overflow: hidden;
@@ -204,7 +204,7 @@
                         <span>Generate Recommendations</span>
                     </button>
                 </div>
-
+                
                 <div id="ai-response-container" class="min-h-[100px] text-left">
                      <div id="ai-loading-spinner" class="hidden text-center text-gray-400 flex flex-col items-center justify-center h-full">
                          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-400"></div>
@@ -259,16 +259,26 @@
                              <label for="genre" class="block text-sm font-medium text-gray-300 mb-2">Genre</label>
                             <select id="genre" name="genre" class="w-full p-3 rounded-lg custom-select appearance-none">
                                  <option value="all">All Genres</option>
-                                 <option value="Fantasy">Fantasy</option>
                                  <option value="Adventure">Adventure</option>
-                                 <option value="Mystery">Mystery</option>
-                                 <option value="Sci-Fi">Science Fiction</option>
-                                 <option value="Humor">Humor</option>
-                                 <option value="Realistic Fiction">Realistic Fiction</option>
+                                 <option value="Animal Story">Animal Story</option>
+                                 <option value="Biography">Biography</option>
+                                 <option value="Classic">Classic</option>
+                                 <option value="Coming-of-Age">Coming-of-Age</option>
+                                 <option value="Dystopian">Dystopian</option>
+                                 <option value="Fantasy">Fantasy</option>
+                                 <option value="Family">Family</option>
+                                 <option value="Folk tale">Folk tale</option>
+                                 <option value="Friendship">Friendship</option>
                                  <option value="Graphic Novel">Graphic Novel</option>
                                  <option value="Historical Fiction">Historical Fiction</option>
-                                 <option value="Biography">Biography</option>
+                                 <option value="Humor">Humor</option>
+                                 <option value="Mystery">Mystery</option>
                                  <option value="Poetry">Poetry</option>
+                                 <option value="Realistic Fiction">Realistic Fiction</option>
+                                 <option value="Romance">Romance</option>
+                                 <option value="School Story">School Story</option>
+                                 <option value="Sci-Fi">Science Fiction</option>
+                                 <option value="Sports">Sports</option>
                             </select>
                         </div>
                          <!-- Clear Filters Button -->
@@ -290,9 +300,9 @@
                 </div>
             </div>
         </section>
-
+        
     </main>
-
+    
     <!-- Footer -->
     <footer class="bg-gray-900/50 border-t border-gray-800 mt-20">
         <div class="container mx-auto px-6 py-8 text-center text-gray-400">
@@ -308,7 +318,7 @@
            <!-- Content will be injected by JavaScript -->
         </div>
     </div>
-
+    
     <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-5 right-5 bg-indigo-600 text-white py-3 px-6 rounded-lg shadow-lg flex items-center space-x-3 z-50">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
@@ -321,71 +331,63 @@
 
             // --- DATABASE ---
             const books = [
-                // Picture Books (Ages 4-6)
-                { id: 1, title: "Awâsis and the World-Famous Bannock", author: "Dallas Hunt", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "A young Cree child, Awâsis, loses their Kôhkum's freshly made bannock. With the help of animal friends, Awâsis retraces their steps to find the treasured food.", teaser: "Follow Awâsis on a delightful adventure through the forest." },
-                { id: 2, title: "Boxitects", author: "Kim Smith", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "Meg is a 'boxitect,' an architect who builds with boxes. When another boxitect, Simone, joins her class, they must learn to collaborate on a grand project for the annual Maker Match.", teaser: "Can two master boxitects learn to work together?" },
-                { id: 3, title: "Change Sings: A Children's Anthem", author: "Amanda Gorman", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Poetry", summary: "Presidential Inaugural Poet Amanda Gorman shares a lyrical anthem about a young girl who leads a cast of characters on a musical journey, showing that they have the power to make changes in the world.", teaser: "I can hear change humming, in its loudest, proudest song." },
-                { id: 4, title: "Choosing Brave", author: "Angela Joy", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Biography", summary: "The story of how a girl, inspired by the Little Rock Nine, chooses to be brave and be the first to integrate her school.", teaser: "A powerful story about the courage of children." },
-                { id: 5, title: "Eyes That Kiss in the Corners", author: "Joanna Ho", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "A young Asian girl notices that her eyes look different from her peers'. She learns to recognize her own beauty and celebrate the legacy of her family.", teaser: "A lyrical, heartfelt celebration of Asian heritage." },
-                { id: 6, title: "Finding the Music/En pos de la música", author: "Jennifer Torres", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "When her grandfather's mariachi guitar is accidentally damaged, Reyna must find someone to fix it. Her journey through her community reveals a hidden history.", teaser: "A bilingual story of family, community, and the music that connects us." },
-                { id: 7, title: "I Want 100 Dogs", author: "Stacy McAnulty", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Humor", summary: "A girl makes a presentation to her parents on why she needs not one, not ten, but one hundred dogs. A hilarious and imaginative plea for more pets.", teaser: "It's not just a want, it's a need. For 100 dogs." },
-                { id: 8, title: "Knight Owl", author: "Christopher Denise", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Fantasy", summary: "A determined little owl dreams of becoming a knight. Though he may not be the biggest or strongest, his cleverness might be just what the castle needs to solve its dragon problem.", teaser: "Since the day he hatched, Owl dreamed of becoming a real knight." },
-                { id: 9, title: "Bright Star", author: "Yuyi Morales", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Fantasy", summary: "An ethereal and hopeful story of a young fawn navigating a beautiful but sometimes dangerous world, offering a message of resilience and belonging.", teaser: "A beautiful, heartfelt story for the times we live in." },
-                { id: 10, title: "A Different Pond", author: "Bao Phi", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "A powerful, honest glimpse into a relationship between a father and son - and between cultures, old and new. A story of immigration and fishing.", teaser: "A fishing trip on a Minneapolis lake is a small adventure." },
-                { id: 11, title: "Flashlight Night", author: "Matt Forrest Esenwine", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Fantasy", summary: "Three children use a flashlight to imagine a world of adventure in their backyard, transforming ordinary objects into fantastical scenes.", teaser: "What worlds can you discover when you have a flashlight?" },
-                { id: 12, title: "Lost and Found Cat", author: "Doug Kuntz", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Biography", summary: "The true story of an Iraqi family who was separated from their beloved pet cat, Kunkush, and the international effort to reunite them.", teaser: "A heartwarming, true story of a refugee family." },
-                { id: 13, title: "My Hair Is a Garden", author: "Cozbi A. Cabrera", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "After being teased about her hair, MacKenzie learns from her neighbor how to care for her natural hair, seeing it as a beautiful garden.", teaser: "A story about self-acceptance and natural beauty." },
-                { id: 14, title: "Natsumi!", author: "Susan Lendroth", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "Natsumi is a little girl who is great at being loud and dramatic, but she struggles with traditional Japanese arts. She finally finds the perfect way to express herself at the summer festival.", teaser: "Natsumi wasn't good at being quiet." },
-
-                // Easy Readers / Chapter Books (Ages 7-9)
-                { id: 15, title: "Ada Twist and the Perilous Pants", author: "Andrea Beaty", ageGroup: "7-9", readingLevel: "Chapter Book", genre: "Mystery", summary: "Ada Twist is a young scientist with a big imagination. When her dad's favorite pants get ruined, she uses the scientific method to solve the mystery.", teaser: "A mystery with a super-scientist and her friends." },
-                { id: 16, title: "Arlo & Pips: King of the Birds", author: "Elise Gravel", ageGroup: "7-9", readingLevel: "Chapter Book", genre: "Humor", summary: "Arlo the crow is a witty bird who loves to boast about his intelligence. This graphic chapter book is full of funny facts about crows and city wildlife.", teaser: "Arlo the crow is no ordinary bird." },
-                { id: 17, title: "Bunbun & Bonbon: Fancy Friends", author: "Jess Keating", ageGroup: "7-9", readingLevel: "Chapter Book", genre: "Graphic Novel", summary: "A sweet and funny graphic novel about an adorable bunny and his best friend, a fancy piece of candy, as they embark on various adventures.", teaser: "Meet Bunbun, a very sweet bunny. And his best friend, Bonbon." },
-                { id: 18, title: "Evelyn Del Rey Is Moving Away", author: "Meg Medina", ageGroup: "7-9", readingLevel: "Easy Reader", genre: "Realistic Fiction", summary: "Two best friends, Evelyn and Daniela, spend one last day together before Evelyn moves away. A touching story about friendship and saying goodbye.", teaser: "A beautifully illustrated story of friendship." },
-                { id: 19, title: "Meet Yasmin!", author: "Saadia Faruqi", ageGroup: "7-9", readingLevel: "Easy Reader", genre: "Realistic Fiction", summary: "Yasmin is a creative second-grader who is always ready for an adventure. This book contains four short stories about her life as an explorer, painter, and builder.", teaser: "A creative Pakistani-American girl with a big imagination." },
-                { id: 20, title: "I Survived the Shark Attacks of 1916", author: "Lauren Tarshis", ageGroup: "7-9", readingLevel: "Chapter Book", genre: "Historical Fiction", summary: "A young boy is fascinated by sharks and the ocean, but his excitement turns to terror when a series of shark attacks plague the Jersey Shore.", teaser: "A gripping tale of survival based on true events." },
-                { id: 21, title: "Jo Jo Makoons: The Used-to-Be Best Friend", author: "Dawn Quigley", ageGroup: "7-9", readingLevel: "Chapter Book", genre: "Realistic Fiction", summary: "Jo Jo Makoons is a spirited first-grader from an Ojibwe reservation navigating the ups and downs of friendship and school life.", teaser: "Her best friend isn't her best friend anymore." },
-                { id: 22, title: "The Poet's Dog", author: "Patricia MacLachlan", ageGroup: "7-9", readingLevel: "Chapter Book", genre: "Fantasy", summary: "A dog, gifted with the ability to understand language by his poet owner, rescues two children lost in a snowstorm and leads them to safety in his cozy cabin.", teaser: "A touching story of loss, love, and the power of words." },
-
-                // Middle Grade (Ages 10-12)
-                { id: 23, title: "Big Tree", author: "Brian Selznick", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Fantasy", summary: "Two sycamore seeds, Louise and Merwin, are propelled into the world during a volcanic eruption and embark on a perilous journey through time to find a safe place to grow.", teaser: "A story of hope, resilience, and the interconnectedness of life." },
-                { id: 24, title: "Blended", author: "Sharon M. Draper", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Realistic Fiction", summary: "Isabella's blended family is more than just black and white. She feels pulled between her divorced parents and their new lives, struggling to find her own identity.", teaser: "A poignant story about a biracial girl's journey." },
-                { id: 25, title: "The Dreamatics", author: "Michelle Cuevas", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Fantasy", summary: "A group of creatures called the Dreamatics are responsible for producing one girl's dreams. When she starts having nightmares, they must venture into the real world to save her.", teaser: "Ever wonder where dreams come from?" },
-                { id: 26, title: "Ellie, Engineer", author: "Jackson Pearce", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Realistic Fiction", summary: "Ellie is a budding engineer who loves to build. She puts her skills to the test to design the perfect gift for her best friend's birthday.", teaser: "A fun story celebrating STEM, creativity, and friendship." },
-                { id: 27, title: "Get a Grip, Vivy Cohen!", author: "Sarah Kapit", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Realistic Fiction", summary: "Vivy Cohen, an autistic girl with a wicked knuckleball, writes letters to her hero, a major league pitcher, as she navigates playing on a boys' baseball team.", teaser: "A story about autism, baseball, and self-advocacy." },
-                { id: 28, title: "Green", author: "Alex Gino", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Realistic Fiction", summary: "A story about a nonbinary kid named Green who is navigating identity, friendship, and family. A thoughtful exploration of gender and what it means to be yourself.", teaser: "A powerful and gentle story about being true to yourself." },
-                { id: 29, title: "Hatchet", author: "Gary Paulsen", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Adventure", summary: "After a plane crash, 13-year-old Brian Robeson is stranded in the Canadian wilderness with nothing but a hatchet. He must learn to survive on his own.", teaser: "A classic tale of survival and self-reliance." },
-                { id: 30, title: "One Crazy Summer", author: "Rita Williams-Garcia", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Historical Fiction", summary: "Three sisters travel to Oakland, California, in 1968 to spend the summer with the mother who abandoned them, and find themselves in the midst of the Black Panther movement.", teaser: "A powerful story of family, identity, and history." },
-                { id: 31, title: "The Parker Inheritance", author: "Varian Johnson", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Mystery", summary: "Candice finds a mysterious letter that leads her and a friend on a treasure hunt through their town's history, uncovering a story of prejudice and injustice.", teaser: "A compelling mystery that weaves past and present." },
-                { id: 32, title: "The Sea in Winter", author: "Christine Day", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Realistic Fiction", summary: "After a ballet injury, Maisie feels lost and disconnected from her Native American heritage. A family trip helps her find a new path to healing.", teaser: "A story about resilience, family, and finding your way back." },
-                { id: 33, title: "The Stars Beneath Our Feet", author: "David Barclay Moore", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Realistic Fiction", summary: "A boy grieving his brother's death finds solace and a new path forward by building an elaborate LEGO city.", teaser: "A powerful story about grief, creativity, and community." },
-
-                // Young Adult (Ages 13+)
-                { id: 34, title: "All Boys Aren't Blue: A Memoir-Manifesto", author: "George M. Johnson", ageGroup: "13+", readingLevel: "Young Adult", genre: "Biography", summary: "A series of personal essays from journalist and activist George M. Johnson, exploring their childhood and adolescence growing up as a Black queer boy in New Jersey.", teaser: "A powerful and unflinching look at identity." },
-                { id: 35, title: "All of This Is True", author: "Lygia Day Peñaflor", ageGroup: "13+", readingLevel: "Young Adult", genre: "Mystery", summary: "Four teens befriend their favorite author, only to find their darkest secrets exposed in her next bestselling book. A thrilling look at the dark side of fandom.", teaser: "Be careful who you trust." },
-                { id: 36, title: "As Long as the Lemon Trees Grow", author: "Zoulfa Katouh", ageGroup: "13+", readingLevel: "Young Adult", genre: "Historical Fiction", summary: "A pharmacy student in war-torn Syria is torn between her duty to her country and her desire to escape to safety, all while being haunted by a manifestation of her fear.", teaser: "A heartbreaking and hopeful story of love and war." },
-                { id: 37, title: "The Black Veins", author: "Ashia Monet", ageGroup: "13+", readingLevel: "Young Adult", genre: "Fantasy", summary: "In a world where magic is a commodity, a group of Black magicians embark on a road trip across the country to find a hidden magical city and save their families.", teaser: "A contemporary fantasy adventure about found family." },
-                { id: 38, title: "The Desolations of Devil's Acre", author: "Ransom Riggs", ageGroup: "13+", readingLevel: "Young Adult", genre: "Fantasy", summary: "The final installment in the Miss Peregrine's Home for Peculiar Children series, where Jacob and his friends must face their greatest challenge yet to save all of peculiarity.", teaser: "The epic conclusion to the peculiar children saga." },
-                { id: 39, title: "Ghost Wood Song", author: "Erica Waters", ageGroup: "13+", readingLevel: "Young Adult", genre: "Mystery", summary: "Shady Grove can call ghosts with her fiddle. When her brother is accused of murder, she must use her haunted ability to clear his name, uncovering dark family secrets along the way.", teaser: "A haunting southern gothic mystery." },
-                { id: 40, title: "Gilded", author: "Marissa Meyer", ageGroup: "13+", readingLevel: "Young Adult", genre: "Fantasy", summary: "A dark and romantic retelling of the Rumpelstiltskin fairy tale, filled with curses, secrets, and a captivating love story.", teaser: "A cursed girl, a haunted king, and a deal with the dark one." },
-                { id: 41, title: "Gwen & Art Are Not in Love", author: "Lex Croucher", ageGroup: "13+", readingLevel: "Young Adult", genre: "Historical Fiction", summary: "A queer, medieval rom-com where the princess and the knight-in-training are betrothed but secretly in love with other people. They team up to navigate courtly life and find their own happy endings.", teaser: "A fun, anachronistic take on Arthurian legend." },
-                { id: 42, title: "The House in the Cerulean Sea", author: "TJ Klune", ageGroup: "13+", readingLevel: "Young Adult", genre: "Fantasy", summary: "A by-the-book case worker is sent to a remote island orphanage for magical children and finds an unexpected family in the most unlikely of places.", teaser: "A heartwarming and enchanting story about found family." },
-                { id: 43, title: "They Both Die at the End", author: "Adam Silvera", ageGroup: "13+", readingLevel: "Young Adult", genre: "Realistic Fiction", summary: "In a world where an app can predict your death day, two boys, Mateo and Rufus, connect on their last day to live a lifetime of adventure together.", teaser: "A devastating yet uplifting story about life and loss." },
-                { id: 44, title: "Watch Us Rise", author: "Renée Watson and Ellen Hagan", ageGroup: "13+", readingLevel: "Young Adult", genre: "Realistic Fiction", summary: "Two best friends start a feminist blog and club at their high school to challenge sexism and give a voice to their fellow students, facing backlash along the way.", teaser: "A powerful story about activism and friendship." },
-
-                // Graphic Novels (Various Ages)
-                { id: 45, title: "Act (A Click Graphic Novel)", author: "Kayla Miller", ageGroup: "7-9", readingLevel: "Chapter Book", genre: "Graphic Novel", summary: "Olive is passionate about a cause and wants to make a difference. This graphic novel explores student activism, friendship, and finding your voice.", teaser: "How can one girl make a difference?" },
-                { id: 46, title: "Class Act", author: "Jerry Craft", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Graphic Novel", summary: "The sequel to 'New Kid,' this story follows Drew, one of Jordan's friends, as he navigates the challenges of being a student of color at a prestigious private school.", teaser: "Navigating friendships and finding your place." },
-                { id: 47, title: "Dragon Hoops", author: "Gene Luen Yang", ageGroup: "13+", readingLevel: "Young Adult", genre: "Graphic Novel", summary: "A non-fiction graphic novel that follows the journey of a high school basketball team on their quest for a state championship, interwoven with the history of the sport.", teaser: "The true story of a team's journey to glory." },
-                { id: 48, title: "Heartstopper", author: "Alice Oseman", ageGroup: "13+", readingLevel: "Young Adult", genre: "Graphic Novel", summary: "A heartwarming and wholesome graphic novel about the budding romance between two British schoolboys, Charlie and Nick, exploring themes of love, friendship, and identity.", teaser: "Boy meets boy. Boys become friends. Boys fall in love." },
-                { id: 49, title: "March: Book One", author: "John Lewis, Andrew Aydin, and Nate Powell", ageGroup: "13+", readingLevel: "Young Adult", genre: "Graphic Novel", summary: "A firsthand account of Congressman John Lewis's lifelong struggle for civil and human rights, beginning with his youth in rural Alabama.", teaser: "A vivid and powerful memoir of the Civil Rights Movement." },
-                { id: 50, title: "Measuring Up", author: "Lily LaMotte and Ann Xu", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Graphic Novel", summary: "Cici, a young Taiwanese immigrant, enters a cooking competition to win the money to fly her grandmother to the U.S. for her birthday, all while navigating a new school and culture.", teaser: "A story about family, food, and finding your place." },
-                { id: 51, title: "The Oracle Code", author: "Marieke Nijkamp and Manuel Preitano", ageGroup: "13+", readingLevel: "Young Adult", genre: "Graphic Novel", summary: "A reimagining of Barbara Gordon (Batgirl) as a teen hacker who, after a tragic accident, must solve a mystery at her creepy new rehabilitation center.", teaser: "A tense, atmospheric mystery." },
-                { id: 52, title: "Poe: Stories and Poems", author: "Gareth Hinds", ageGroup: "13+", readingLevel: "Young Adult", genre: "Graphic Novel", summary: "A graphic novel adaptation of some of Edgar Allan Poe's most famous and haunting works, including 'The Raven' and 'The Cask of Amontillado'.", teaser: "Classic horror brought to life in stunning visuals." },
-                { id: 53, title: "Sanity & Tallulah", author: "Molly Brooks", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Graphic Novel", summary: "On a space station, two best friends, Sanity and Tallulah, have to find their illegal, three-headed kitten after it escapes and causes chaos.", teaser: "A fun sci-fi adventure with a genetically engineered cat." },
-                { id: 54, title: "When Stars Are Scattered", author: "Victoria Jamieson and Omar Mohamed", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Graphic Novel", summary: "The true story of two Somali brothers growing up in a refugee camp in Kenya, and their long journey to find a new home.", teaser: "A powerful story of hope, resilience, and family." },
+                // Existing Books
+                { id: 1, title: "Awâsis and the World-Famous Bannock", author: "Dallas Hunt", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "A young Cree child, Awâsis, loses their Kôhkum's freshly made bannock. With the help of animal friends, Awâsis retraces their steps to find the treasured food.", teaser: "Follow Awâsis on a delightful adventure through the forest.", coverUrl: "https://placehold.co/400x600/6366f1/ffffff?text=Awâsis+and\\nthe+World-\\nFamous\\nBannock" },
+                { id: 2, title: "Boxitects", author: "Kim Smith", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "Meg is a 'boxitect,' an architect who builds with boxes. When another boxitect, Simone, joins her class, they must learn to collaborate on a grand project for the annual Maker Match.", teaser: "Can two master boxitects learn to work together?", coverUrl: "https://placehold.co/400x600/7c3aed/ffffff?text=Boxitects" },
+                { id: 3, title: "Change Sings: A Children's Anthem", author: "Amanda Gorman", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Poetry", summary: "Presidential Inaugural Poet Amanda Gorman shares a lyrical anthem about a young girl who leads a cast of characters on a musical journey, showing that they have the power to make changes in the world.", teaser: "I can hear change humming, in its loudest, proudest song.", coverUrl: "https://placehold.co/400x600/f59e0b/ffffff?text=Change+Sings" },
+                { id: 4, title: "Choosing Brave", author: "Angela Joy", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Biography", summary: "The story of how a girl, inspired by the Little Rock Nine, chooses to be brave and be the first to integrate her school.", teaser: "A powerful story about the courage of children.", coverUrl: "https://placehold.co/400x600/10b981/ffffff?text=Choosing+Brave" },
+                { id: 5, title: "Eyes That Kiss in the Corners", author: "Joanna Ho", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "A young Asian girl notices that her eyes look different from her peers'. She learns to recognize her own beauty and celebrate the legacy of her family.", teaser: "A lyrical, heartfelt celebration of Asian heritage.", coverUrl: "https://placehold.co/400x600/ec4899/ffffff?text=Eyes+That\\nKiss+in+the\\nCorners" },
+                { id: 43, title: "They Both Die at the End", author: "Adam Silvera", ageGroup: "13+", readingLevel: "Young Adult", genre: "Realistic Fiction", summary: "In a world where an app can predict your death day, two boys, Mateo and Rufus, connect on their last day to live a lifetime of adventure together.", teaser: "A devastating yet uplifting story about life and loss.", coverUrl: "https://placehold.co/400x600/4f46e5/ffffff?text=They+Both\\nDie+at+the+End" },
+                { id: 44, title: "Watch Us Rise", author: "Renée Watson and Ellen Hagan", ageGroup: "13+", readingLevel: "Young Adult", genre: "Realistic Fiction", summary: "Two best friends start a feminist blog and club at their high school to challenge sexism and give a voice to their fellow students, facing backlash along the way.", teaser: "A powerful story about activism and friendship.", coverUrl: "https://placehold.co/400x600/059669/ffffff?text=Watch+Us+Rise" },
+                { id: 45, title: "Act (A Click Graphic Novel)", author: "Kayla Miller", ageGroup: "7-9", readingLevel: "Chapter Book", genre: "Graphic Novel", summary: "Olive is passionate about a cause and wants to make a difference. This graphic novel explores student activism, friendship, and finding your voice.", teaser: "How can one girl make a difference?", coverUrl: "https://placehold.co/400x600/d946ef/ffffff?text=Act" },
+                { id: 46, title: "Class Act", author: "Jerry Craft", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Graphic Novel", summary: "The sequel to 'New Kid,' this story follows Drew, one of Jordan's friends, as he navigates the challenges of being a student of color at a prestigious private school.", teaser: "Navigating friendships and finding your place.", coverUrl: "https://placehold.co/400x600/f97316/ffffff?text=Class+Act" },
+                { id: 47, title: "Dragon Hoops", author: "Gene Luen Yang", ageGroup: "13+", readingLevel: "Young Adult", genre: "Graphic Novel", summary: "A non-fiction graphic novel that follows the journey of a high school basketball team on their quest for a state championship, interwoven with the history of the sport.", teaser: "The true story of a team's journey to glory.", coverUrl: "https://placehold.co/400x600/ef4444/ffffff?text=Dragon+Hoops" },
+                { id: 48, title: "Heartstopper", author: "Alice Oseman", ageGroup: "13+", readingLevel: "Young Adult", genre: "Graphic Novel", summary: "A heartwarming and wholesome graphic novel about the budding romance between two British schoolboys, Charlie and Nick, exploring themes of love, friendship, and identity.", teaser: "Boy meets boy. Boys become friends. Boys fall in love.", coverUrl: "https://placehold.co/400x600/f472b6/ffffff?text=Heartstopper" },
+                
+                // --- NEW BOOKS ADDED BELOW ---
+                { id: 55, title: "Where the Wild Things Are", author: "Maurice Sendak", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Fantasy", summary: "A young boy named Max, after being sent to his room without supper, escapes to an island inhabited by magnificent, toothy creatures known as the Wild Things.", teaser: "Let the wild rumpus start!", coverUrl: "https://placehold.co/400x600/3f3f46/ffffff?text=Where+the\\nWild+Things\\nAre" },
+                { id: 56, title: "The Very Hungry Caterpillar", author: "Eric Carle", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "Follows the journey of a caterpillar as it eats its way through a wide variety of foodstuffs before pupating and emerging as a beautiful butterfly.", teaser: "He was a beautiful butterfly!", coverUrl: "https://placehold.co/400x600/4ade80/ffffff?text=The+Very\\nHungry\\nCaterpillar" },
+                { id: 57, title: "Goodnight Moon", author: "Margaret Wise Brown", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Family", summary: "In a great green room, a little bunny says goodnight to all the familiar things in the softly lit room, one by one.", teaser: "Goodnight noises everywhere.", coverUrl: "https://placehold.co/400x600/94a3b8/ffffff?text=Goodnight\\nMoon" },
+                { id: 58, title: "Caps for Sale", author: "Esphyr Slobodkina", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Folk tale", summary: "A peddler who balances a stack of caps on his head takes a nap under a tree, only to wake up and find his caps have been stolen by a group of mischievous monkeys.", teaser: "You monkeys, you! Give me back my caps!", coverUrl: "https://placehold.co/400x600/facc15/ffffff?text=Caps+for+Sale" },
+                { id: 59, title: "The Snowy Day", author: "Ezra Jack Keats", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Realistic Fiction", summary: "A Caldecott Medal-winning story that beautifully depicts a small boy's quiet wonder and delight on a snowy day, a classic for its groundbreaking portrayal of a Black protagonist.", teaser: "The quiet magic of a city blanketed in snow.", coverUrl: "https://placehold.co/400x600/fb923c/ffffff?text=The+Snowy+Day" },
+                { id: 60, title: "Corduroy", author: "Don Freeman", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Adventure", summary: "A teddy bear waiting on a department store shelf goes on a nighttime adventure to find his lost button, hoping it will help him find a home and a friend.", teaser: "A story of a small bear's big adventure.", coverUrl: "https://placehold.co/400x600/a16207/ffffff?text=Corduroy" },
+                { id: 61, title: "Chicka Chicka Boom Boom", author: "Bill Martin Jr.", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Humor", summary: "The letters of the alphabet race each other up the coconut tree. Will there be enough room? A fun, rhythmic story for learning letters.", teaser: "A told B, and B told C, 'I'll meet you at the top of the coconut tree.'", coverUrl: "https://placehold.co/400x600/84cc16/ffffff?text=Chicka\\nChicka\\nBoom+Boom" },
+                { id: 62, title: "Knuffle Bunny", author: "Mo Willems", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Family", summary: "A toddler named Trixie accidentally leaves her beloved stuffed bunny at the laundromat, leading to a desperate, hilarious, and heartwarming search.", teaser: "A cautionary tale about what happens when you lose your favorite bunny.", coverUrl: "https://placehold.co/400x600/d1d5db/ffffff?text=Knuffle+Bunny" },
+                { id: 63, title: "The Tale of Peter Rabbit", author: "Beatrix Potter", ageGroup: "4-6", readingLevel: "Picture Book", genre: "Classic", summary: "A mischievous young rabbit disobeys his mother and sneaks into Mr. McGregor's garden, leading to a thrilling and narrow escape.", teaser: "Once upon a time there were four little Rabbits...", coverUrl: "https://placehold.co/400x600/bfdbfe/ffffff?text=The+Tale+of\\nPeter+Rabbit" },
+                { id: 64, title: "Frog and Toad Are Friends", author: "Arnold Lobel", ageGroup: "7-9", readingLevel: "Easy Reader", genre: "Friendship", summary: "A collection of five heartwarming short stories that chronicle the adventures and deep friendship between a cheerful frog and a grumpy but lovable toad.", teaser: "Celebrate the power of friendship.", coverUrl: "https://placehold.co/400x600/a3e635/ffffff?text=Frog+and\\nToad" },
+                { id: 65, title: "Amelia Bedelia", author: "Peggy Parish", ageGroup: "7-9", readingLevel: "Easy Reader", genre: "Humor", summary: "A literal-minded housekeeper causes comical chaos when she takes every instruction at face value, from 'dusting the furniture' to 'drawing the drapes'.", teaser: "A hilarious look at what happens when you take things too literally.", coverUrl: "https://placehold.co/400x600/fde047/ffffff?text=Amelia+Bedelia" },
+                { id: 66, title: "Henry and Mudge", author: "Cynthia Rylant", ageGroup: "7-9", readingLevel: "Easy Reader", genre: "Realistic Fiction", summary: "The first book in a beloved series about a young boy named Henry and his 182-pound dog, Mudge, as they navigate the joys of pet ownership and friendship.", teaser: "The perfect beginning to a boy-and-his-dog story.", coverUrl: "https://placehold.co/400x600/fdba74/ffffff?text=Henry+and\\nMudge" },
+                { id: 67, title: "Magic Tree House: Dinosaurs Before Dark", author: "Mary Pope Osborne", ageGroup: "7-9", readingLevel: "Chapter Book", genre: "Adventure", summary: "Siblings Jack and Annie discover a mysterious tree house that can transport them through time. Their first journey takes them back to the age of dinosaurs.", teaser: "Where did the tree house come from?", coverUrl: "https://placehold.co/400x600/86efac/ffffff?text=Magic+Tree\\nHouse" },
+                { id: 68, title: "Nate the Great", author: "Marjorie Weinman Sharmat", ageGroup: "7-9", readingLevel: "Chapter Book", genre: "Mystery", summary: "A young, pancake-loving detective takes on his first big case: finding a friend's lost painting of her dog, Fang. He must gather clues and solve the puzzle.", teaser: "I, Nate the Great, will solve this case.", coverUrl: "https://placehold.co/400x600/fcd34d/ffffff?text=Nate+the\\nGreat" },
+                { id: 69, title: "Junie B. Jones and the Stupid Smelly Bus", author: "Barbara Park", ageGroup: "7-9", readingLevel: "Chapter Book", genre: "Humor", summary: "It's kindergarten, and Junie B. Jones has a big problem. A really big problem. She does not want to ride the 'stupid smelly bus' home.", teaser: "A hilarious look at the trials of being a kindergartener.", coverUrl: "https://placehold.co/400x600/f9a8d4/ffffff?text=Junie+B.+Jones" },
+                { id: 70, title: "The Berenstain Bears and the Messy Room", author: "Stan & Jan Berenstain", ageGroup: "7-9", readingLevel: "Easy Reader", genre: "Family", summary: "Brother and Sister Bear's room is a disaster! Mama Bear finally has enough and teaches them a lesson about organization and responsibility.", teaser: "A classic story about the importance of cleaning up.", coverUrl: "https://placehold.co/400x600/d2b48c/ffffff?text=Berenstain\\nBears" },
+                { id: 71, title: "Flat Stanley", author: "Jeff Brown", ageGroup: "7-9", readingLevel: "Chapter Book", genre: "Adventure", summary: "After a bulletin board falls on him, Stanley Lambchop is only half an inch thick! He discovers he can now be mailed in an envelope, leading to amazing adventures.", teaser: "Being flat has its advantages.", coverUrl: "https://placehold.co/400x600/b0c4de/ffffff?text=Flat+Stanley" },
+                { id: 72, title: "The Boxcar Children", author: "Gertrude Chandler Warner", ageGroup: "7-9", readingLevel: "Chapter Book", genre: "Mystery", summary: "Four orphaned siblings create a home for themselves in an abandoned boxcar in the woods. They must work together to survive and solve mysteries.", teaser: "Four brave siblings and their secret home.", coverUrl: "https://placehold.co/400x600/a52a2a/ffffff?text=The+Boxcar\\nChildren" },
+                { id: 73, title: "Ivy and Bean", author: "Annie Barrows", ageGroup: "7-9", readingLevel: "Chapter Book", genre: "Friendship", summary: "Two girls who think they have nothing in common, loud Ivy and quiet Bean, discover they are destined to be best friends after a magical prank goes awry.", teaser: "Sometimes the best friends are the ones you least expect.", coverUrl: "https://placehold.co/400x600/c084fc/ffffff?text=Ivy+and+Bean" },
+                { id: 74, title: "Charlotte's Web", author: "E.B. White", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Classic", summary: "A clever spider named Charlotte weaves words into her web to save her friend Wilbur, a humble pig, from becoming bacon.", teaser: "A timeless story of friendship, life, and death.", coverUrl: "https://placehold.co/400x600/fbcfe8/ffffff?text=Charlotte's\\nWeb" },
+                { id: 75, title: "The One and Only Ivan", author: "Katherine Applegate", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Animal Story", summary: "Inspired by a true story, this novel is narrated by a gorilla named Ivan who has spent years in a shopping mall cage. He begins to see his home in a new light when a baby elephant arrives.", teaser: "A story about the power of friendship and the meaning of home.", coverUrl: "https://placehold.co/400x600/9ca3af/ffffff?text=The+One+\\nand+Only\\nIvan" },
+                { id: 76, title: "Matilda", author: "Roald Dahl", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Fantasy", summary: "Matilda is a brilliant girl with neglectful parents and a tyrannical headmistress. She discovers she has the power of telekinesis and uses it to fight back.", teaser: "A magical story about a very special little girl.", coverUrl: "https://placehold.co/400x600/a78bfa/ffffff?text=Matilda" },
+                { id: 77, title: "The Tale of Despereaux", author: "Kate DiCamillo", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Fantasy", summary: "The story of a small mouse with big ears who is in love with a princess, a rat who loves the light, and a servant girl who wishes for more. Their fates are intertwined.", teaser: "A story of bravery, forgiveness, and soup.", coverUrl: "https://placehold.co/400x600/fef08a/ffffff?text=The+Tale+of\\nDespereaux" },
+                { id: 78, title: "Because of Winn-Dixie", author: "Kate DiCamillo", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Realistic Fiction", summary: "A lonely 10-year-old girl adopts a stray dog she names Winn-Dixie. The dog's charming personality helps her make new friends in a small Florida town.", teaser: "A heartwarming story about a girl and her dog.", coverUrl: "https://placehold.co/400x600/eab308/ffffff?text=Because+of\\nWinn-Dixie" },
+                { id: 79, title: "Diary of a Wimpy Kid", author: "Jeff Kinney", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Humor", summary: "Greg Heffley navigates the treacherous world of middle school, documenting his experiences in a diary (not a journal!) filled with hilarious cartoons and observations.", teaser: "It's a journal, not a diary.", coverUrl: "https://placehold.co/400x600/e5e7eb/ffffff?text=Diary+of+a\\nWimpy+Kid" },
+                { id: 80, title: "Frindle", author: "Andrew Clements", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "School Story", summary: "A clever fifth-grader named Nick Allen invents a new word for 'pen'—frindle. The word takes on a life of its own, causing a national sensation and a battle of wills with his language arts teacher.", teaser: "Who says a pen has to be called a pen?", coverUrl: "https://placehold.co/400x600/60a5fa/ffffff?text=Frindle" },
+                { id: 81, title: "Bridge to Terabithia", author: "Katherine Paterson", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Realistic Fiction", summary: "Two friends, Jess and Leslie, create a magical kingdom in the woods called Terabithia. Their imaginary world helps them cope with the challenges of reality until a sudden tragedy changes everything.", teaser: "A powerful story of friendship, imagination, and loss.", coverUrl: "https://placehold.co/400x600/bbf7d0/ffffff?text=Bridge+to\\nTerabithia" },
+                { id: 82, title: "Holes", author: "Louis Sachar", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Mystery", summary: "Wrongfully sent to a brutal juvenile detention camp, a boy must dig a hole every day. He soon realizes they aren't just digging holes; they're digging for something specific.", teaser: "A story of fate, friendship, and buried treasure.", coverUrl: "https://placehold.co/400x600/fb923c/ffffff?text=Holes" },
+                { id: 83, title: "Esperanza Rising", author: "Pam Muñoz Ryan", ageGroup: "13+", readingLevel: "Young Adult", genre: "Historical Fiction", summary: "Esperanza, a wealthy girl from Mexico, is forced to flee to a California labor camp during the Great Depression. She must learn to rise above her difficult circumstances.", teaser: "A rich story of immigration, resilience, and hope.", coverUrl: "https://placehold.co/400x600/fca5a5/ffffff?text=Esperanza\\nRising" },
+                { id: 84, title: "A Wrinkle in Time", author: "Madeleine L’Engle", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Sci-Fi", summary: "Meg Murry, her brother Charles Wallace, and their friend Calvin go on a journey through space and time to rescue her scientist father from an evil force that has imprisoned him on another planet.", teaser: "A classic adventure across the universe.", coverUrl: "https://placehold.co/400x600/c4b5fd/ffffff?text=A+Wrinkle\\nin+Time" },
+                { id: 85, title: "Brown Girl Dreaming", author: "Jacqueline Woodson", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Poetry", summary: "A memoir in verse about the author's childhood, growing up as an African American in the 1960s and 1970s, split between South Carolina and New York.", teaser: "A moving look at a child's search for her place in the world.", coverUrl: "https://placehold.co/400x600/e9d5ff/ffffff?text=Brown+Girl\\nDreaming" },
+                { id: 86, title: "Ghost", author: "Jason Reynolds", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Sports", summary: "A boy named Castle 'Ghost' Cranshaw, a natural runner, is recruited for an elite middle school track team. He must learn to harness his speed and confront his past.", teaser: "Running from his past, or towards his future?", coverUrl: "https://placehold.co/400x600/7dd3fc/ffffff?text=Ghost" },
+                { id: 87, title: "The City of Ember", author: "Jeanne DuPrau", ageGroup: "10-12", readingLevel: "Middle Grade", genre: "Dystopian", summary: "In an underground city where the lights are beginning to fail, two children discover an ancient message that may be the only way to save their people.", teaser: "When the lights go out, can they find the way?", coverUrl: "https://placehold.co/400x600/4b5563/ffffff?text=The+City\\nof+Ember" },
+                { id: 88, title: "The Maze Runner", author: "James Dashner", ageGroup: "13+", readingLevel: "Young Adult", genre: "Sci-Fi", summary: "A teenager named Thomas wakes up in a massive, ever-changing maze with a group of other boys. They must work together to escape and uncover the secrets of their world.", teaser: "Remember. Survive. Run.", coverUrl: "https://placehold.co/400x600/1e40af/ffffff?text=The+Maze\\nRunner" },
+                { id: 89, title: "Scythe", author: "Neal Shusterman", ageGroup: "13+", readingLevel: "Young Adult", genre: "Dystopian", summary: "In a world where humanity has conquered death, two teens must apprentice to a 'Scythe'—a person tasked with controlling the population by taking lives.", teaser: "Thou shalt kill.", coverUrl: "https://placehold.co/400x600/991b1b/ffffff?text=Scythe" },
+                { id: 90, title: "Turtles All the Way Down", author: "John Green", ageGroup: "13+", readingLevel: "Young Adult", genre: "Realistic Fiction", summary: "Aza Holmes, a high school student living with obsessive-compulsive disorder, tries to solve the mystery of a fugitive billionaire while navigating her own spiraling thoughts.", teaser: "A story about the challenges of living with mental illness.", coverUrl: "https://placehold.co/400x600/16a34a/ffffff?text=Turtles+All\\nthe+Way+Down" },
+                { id: 91, title: "The Book Thief", author: "Markus Zusak", ageGroup: "13+", readingLevel: "Young Adult", genre: "Historical Fiction", summary: "Narrated by Death, this is the story of Liesel Meminger, a German girl who steals books and shares them with her neighbors during the rise of Nazi Germany.", teaser: "Even Death has a heart.", coverUrl: "https://placehold.co/400x600/171717/ffffff?text=The+Book\\nThief" },
+                { id: 92, title: "Fahrenheit 451", author: "Ray Bradbury", ageGroup: "13+", readingLevel: "Young Adult", genre: "Classic", summary: "In a dystopian future where books are outlawed, a firefighter whose job is to burn them begins to question his role and starts to steal books himself.", teaser: "It was a pleasure to burn.", coverUrl: "https://placehold.co/400x600/f97316/ffffff?text=Fahrenheit\\n451" },
+                { id: 93, title: "The House on Mango Street", author: "Sandra Cisneros", ageGroup: "13+", readingLevel: "Young Adult", genre: "Coming-of-Age", summary: "A series of vignettes about a young Latina girl named Esperanza Cordero growing up in a Chicago neighborhood, and her dream of one day leaving it behind.", teaser: "A classic story of a young woman's journey to find her own voice.", coverUrl: "https://placehold.co/400x600/ec4899/ffffff?text=The+House\\non+Mango+St" },
+                { id: 94, title: "To Kill a Mockingbird", author: "Harper Lee", ageGroup: "13+", readingLevel: "Young Adult", genre: "Classic", summary: "A timeless novel about justice, prejudice, and childhood innocence in the American South, as seen through the eyes of a young girl named Scout Finch.", teaser: "A story that explores the best and worst of human nature.", coverUrl: "https://placehold.co/400x600/78716c/ffffff?text=To+Kill+a\\nMockingbird" },
+                { id: 95, title: "Everything, Everything", author: "Nicola Yoon", ageGroup: "13+", readingLevel: "Young Adult", genre: "Romance", summary: "A teenage girl who is allergic to everything and has never left her house falls in love with the boy next door, leading her to risk it all for a chance at life.", teaser: "What if you couldn't touch anything in the outside world?", coverUrl: "https://placehold.co/400x600/a855f7/ffffff?text=Everything\\nEverything" },
             ];
-
+            
             // --- STATE MANAGEMENT ---
             let filters = {
                 search: '',
@@ -431,7 +433,7 @@
                     const card = document.createElement('div');
                     card.className = 'book-card bg-gray-900/50 rounded-lg overflow-hidden cursor-pointer flex flex-col border border-gray-800';
                     card.innerHTML = `
-                        <img src="${book.cover}" alt="Cover of ${book.title}" class="w-full h-auto object-cover aspect-[2/3]">
+                        <img src="${book.coverUrl}" onerror="this.onerror=null;this.src='https://placehold.co/400x600/374151/ffffff?text=No+Image';" alt="Cover of ${book.title}" class="w-full h-auto object-cover aspect-[2/3]">
                         <div class="p-4 flex flex-col flex-grow">
                             <h3 class="font-bold text-lg text-white truncate">${book.title}</h3>
                             <p class="text-sm text-gray-400 mb-2">${book.author}</p>
@@ -483,11 +485,11 @@
             };
 
             // --- MODAL FUNCTIONS ---
-
+            
             const openBookModal = (bookId) => {
                 const book = books.find(b => b.id === bookId);
                 if (!book) return;
-
+                
                 const isFavorite = myReadingList.includes(book.id);
 
                 modalContent.innerHTML = `
@@ -496,12 +498,12 @@
                     </button>
                     <div class="grid md:grid-cols-3 gap-8 p-6 md:p-8">
                         <div class="md:col-span-1">
-                            <img src="${book.cover}" alt="Cover of ${book.title}" class="w-full h-auto object-cover rounded-lg shadow-lg">
+                            <img src="${book.coverUrl}" onerror="this.onerror=null;this.src='https://placehold.co/400x600/374151/ffffff?text=No+Image';" alt="Cover of ${book.title}" class="w-full h-auto object-cover rounded-lg shadow-lg">
                         </div>
                         <div class="md:col-span-2">
                             <h2 class="text-3xl font-bold text-white mb-1">${book.title}</h2>
                             <p class="text-lg text-gray-400 mb-4">by ${book.author}</p>
-
+                            
                             <div class="flex flex-wrap gap-2 mb-6">
                                 <span class="text-sm font-semibold text-indigo-300 bg-indigo-900/50 px-3 py-1 rounded-full">${book.ageGroup} years</span>
                                 <span class="text-sm font-semibold text-teal-300 bg-teal-900/50 px-3 py-1 rounded-full">${book.readingLevel}</span>
@@ -510,7 +512,7 @@
 
                             <h3 class="text-xl font-semibold text-white mb-2">Summary</h3>
                             <p class="text-gray-300 mb-6">${book.summary}</p>
-
+                            
                             <h3 class="text-xl font-semibold text-white mb-2">Teaser</h3>
                             <p class="text-gray-400 italic mb-6">"${book.teaser}"</p>
 
@@ -543,7 +545,7 @@
             };
 
             // --- FEATURE FUNCTIONS ---
-
+            
             const speakTeaser = (text) => {
                 window.speechSynthesis.cancel();
                 speech.text = text;
@@ -552,7 +554,7 @@
                 speech.pitch = 1;
                 window.speechSynthesis.speak(speech);
             };
-
+            
             const toggleFavorite = (bookId) => {
                 const bookIndex = myReadingList.indexOf(bookId);
                 if (bookIndex > -1) {
@@ -574,7 +576,7 @@
                     document.getElementById('favorite-btn-text').textContent = isFavorite ? 'Remove from List' : 'Add to My List';
                 }
             };
-
+            
             const showToast = (message) => {
                 toastMessage.textContent = message;
                 toast.classList.add('show');
@@ -617,12 +619,12 @@
                     if (!apiResponse.ok) {
                         throw new Error(result.error || `Request failed with status ${apiResponse.status}`);
                     }
-
+                    
                     let aiResponseText = "Sorry, I couldn't generate recommendations. The AI might be temporarily unavailable.";
                     if (result.candidates && result.candidates.length > 0) {
                         aiResponseText = result.candidates[0].content.parts[0].text;
                     }
-
+                    
                     spinner.classList.add('hidden');
                     responseContent.textContent = ''; 
                     responseContent.classList.remove('hidden');
@@ -654,7 +656,7 @@
             genreFilterSelect.addEventListener('change', (e) => { filters.genre = e.target.value; applyFilters(); });
             clearFiltersBtn.addEventListener('click', resetFilters);
             document.getElementById('generate-ai-response').addEventListener('click', handleAIGuide);
-
+            
             collectionCards.forEach(card => {
                 card.addEventListener('click', () => {
                     const genre = card.dataset.genre;
@@ -679,7 +681,7 @@
                     closeBookModal();
                 }
             });
-
+            
             bookGrid.addEventListener('click', (e) => {
                 const heartIcon = e.target.closest('.favorite-icon-grid');
                 if (heartIcon) {
